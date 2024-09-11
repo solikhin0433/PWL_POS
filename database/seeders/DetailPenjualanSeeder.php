@@ -13,7 +13,6 @@ class detailpenjualanseeder extends Seeder
      */
     public function run(): void
     {
-
         $data = [];
 
         $detail_id = 1;

@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\levelcontroller;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -15,4 +15,4 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
-});
+});Route::get('/level',[levelcontroller::class, 'index']);
