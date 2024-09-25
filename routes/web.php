@@ -1,10 +1,11 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\levelcontroller;
+use App\Http\Controllers\dashboardController;
 use App\Http\Controllers\kategoricontroller;
+use App\Http\Controllers\levelcontroller;
 use App\Http\Controllers\usercontroller;
-use App\Http\Controllers\WelcomeController;
+use App\Http\Controllers\welcomeController;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,15 +17,17 @@ use App\Http\Controllers\WelcomeController;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-// Route::get('/', function () {
-//     return view('welcome');
-// });
-// Route::get('/level',[levelcontroller::class, 'index']);
-// Route::get('/kategori',[KategoriController::class, 'index']);
-// Route::get('/user',[UserController::class, 'index']);
-// Route::get('/user/tambah',[UserController::class, 'tambah']);
-// Route::post('/user/tambah_simpan', [usercontroller::class, 'tambah_simpan']);
-// Route::get('/user/ubah/{id}', [UserController::class, 'ubah']);
-// Route::put('/user/ubah_simpan/{id}', [UserController::class, 'ubah_simpan']);           
-// Route::get('/user/hapus/{id}', [UserController::class, 'hapus']);
-Route::get('/',[WelcomeController::class, 'index']);
+
+
+Route::get('/',[welcomeController::class,'index']);
+
+Route::group(['prefix'=>'user'], function(){
+    Route::get('/', [usercontroller::class, 'index']); //menampilkan halaman awal user
+    Route::post('/list',[usercontroller::class, 'list']); //menampilkan data user dalam bentuk json untuk data tables
+    Route::get('/create',[usercontroller::class,'create']); //menampilkan halaman form tambah user
+    Route::post('/',[usercontroller::class,'store']); //menyimpan data user baru
+    Route::get('/{id}',[usercontroller::class,'show']); //menampilkan detail user
+    Route::get('/{id}/edit',[usercontroller::class,'edit']); //menampilkan halaman form edit
+    Route::put('/{id}',[usercontroller::class,'update']);//meyimpan perubahan data user
+    Route::delete('/{id}',[usercontroller::class,'destroy']);//menghapus data user
+});
