@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\levelcontroller;
 use App\Http\Controllers\kategoricontroller;
 use App\Http\Controllers\usercontroller;
+use App\Http\Controllers\WelcomeController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -14,14 +16,15 @@ use App\Http\Controllers\usercontroller;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-Route::get('/', function () {
-    return view('welcome');
-});
-Route::get('/level',[levelcontroller::class, 'index']);
-Route::get('/kategori',[KategoriController::class, 'index']);
-Route::get('/user',[UserController::class, 'index']);
-Route::get('/user/tambah',[UserController::class, 'tambah']);
-Route::post('/user/tambah_simpan', [usercontroller::class, 'tambah_simpan']);
-Route::get('/user/ubah/{id}', [UserController::class, 'ubah']);
-Route::put('/user/ubah_simpan/{id}', [UserController::class, 'ubah_simpan']);           
-Route::get('/user/hapus/{id}', [UserController::class, 'hapus']);
+// Route::get('/', function () {
+//     return view('welcome');
+// });
+// Route::get('/level',[levelcontroller::class, 'index']);
+// Route::get('/kategori',[KategoriController::class, 'index']);
+// Route::get('/user',[UserController::class, 'index']);
+// Route::get('/user/tambah',[UserController::class, 'tambah']);
+// Route::post('/user/tambah_simpan', [usercontroller::class, 'tambah_simpan']);
+// Route::get('/user/ubah/{id}', [UserController::class, 'ubah']);
+// Route::put('/user/ubah_simpan/{id}', [UserController::class, 'ubah_simpan']);           
+// Route::get('/user/hapus/{id}', [UserController::class, 'hapus']);
+Route::get('/',[WelcomeController::class, 'index']);
