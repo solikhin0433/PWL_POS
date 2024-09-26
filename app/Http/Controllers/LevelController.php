@@ -6,7 +6,6 @@ use App\Models\LevelModel;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\DB;
-use Monolog\Level;
 
 class LevelController extends Controller
 {
