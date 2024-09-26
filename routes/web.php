@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\dashboardController;
 use App\Http\Controllers\kategoricontroller;
+use App\Http\Controllers\barangcontroller;
 use App\Http\Controllers\levelcontroller;
 use App\Http\Controllers\usercontroller;
 use App\Http\Controllers\welcomeController;
@@ -49,5 +50,15 @@ Route::group(['prefix' => 'kategori'], function () {
     Route::get('/{id}', [kategoricontroller::class,'show']);      // menampilkan detail kategori
     Route::get('/{id}/edit', [kategoricontroller::class, 'edit']); // menampilkan halaman form edit kategori
     Route::put('/{id}', [kategoricontroller::class, 'update']);    // menyimpan perubahan data kategori
-    Route::delete('/{id}', [kategoricontroller::class, 'destroy']); // menghapus data kategori});
+    Route::delete('/{id}', [kategoricontroller::class, 'destroy']); // menghapus data kategori
+});
+Route::group(['prefix' => 'barang'], function () {
+    Route::get('/', [barangcontroller::class, 'index']);         // menampilkan halaman awal barang
+    Route::post('/list', [barangcontroller::class, 'list']);     // menampilkan data barang dalam bentuk json untuk datatables
+    Route::get('/create', [barangcontroller::class, 'create']);  // menampilkan halaman form tambah barang
+    Route::post('/', [barangcontroller::class,'store']);        // menyimpan data barang baru
+    Route::get('/{id}', [barangcontroller::class,'show']);      // menampilkan detail barang
+    Route::get('/{id}/edit', [barangcontroller::class, 'edit']); // menampilkan halaman form edit barang
+    Route::put('/{id}', [barangcontroller::class, 'update']);    // menyimpan perubahan data barang
+    Route::delete('/{id}', [barangcontroller::class, 'destroy']); // menghapus data barang
 });
