@@ -89,7 +89,7 @@ class KategoriController extends Controller
         ]);
 
         // Redirect ke halaman daftar level dengan pesan sukses
-        return redirect('/kategori')->with('success', 'Data level berhasil disimpan');
+        return redirect('/kategori')->with('success', 'Data kategor berhasil disimpan');
     }
     // Menampilkan detail kategori
     public function show(string $id)

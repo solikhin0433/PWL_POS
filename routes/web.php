@@ -3,6 +3,7 @@
 use App\Http\Controllers\dashboardController;
 use App\Http\Controllers\kategoricontroller;
 use App\Http\Controllers\barangcontroller;
+use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\levelcontroller;
 use App\Http\Controllers\usercontroller;
 use App\Http\Controllers\welcomeController;
@@ -61,4 +62,14 @@ Route::group(['prefix' => 'barang'], function () {
     Route::get('/{id}/edit', [barangcontroller::class, 'edit']); // menampilkan halaman form edit barang
     Route::put('/{id}', [barangcontroller::class, 'update']);    // menyimpan perubahan data barang
     Route::delete('/{id}', [barangcontroller::class, 'destroy']); // menghapus data barang
+});
+Route::group(['prefix' => 'supplier'], function () {
+    Route::get('/', [suppliercontroller::class, 'index']);         // menampilkan halaman awal barang
+    Route::post('/list', [suppliercontroller::class, 'list']);     // menampilkan data barang dalam bentuk json untuk datatables
+    Route::get('/create', [suppliercontroller::class, 'create']);  // menampilkan halaman form tambah barang
+    Route::post('/', [suppliercontroller::class,'store']);        // menyimpan data barang baru
+    Route::get('/{id}', [suppliercontroller::class,'show']);      // menampilkan detail barang
+    Route::get('/{id}/edit', [suppliercontroller::class, 'edit']); // menampilkan halaman form edit barang
+    Route::put('/{id}', [suppliercontroller::class, 'update']);    // menyimpan perubahan data barang
+    Route::delete('/{id}', [suppliercontroller::class, 'destroy']); // menghapus data barang
 });
