@@ -40,12 +40,12 @@ class KategoriController extends Controller
                 $btn = '<a href="' . url('/kategori/' . $kategori->kategori_id) . '" class="btn btn-info btn-sm"><i class="bi bi-info mr-2"></i>Detail</a> ';
                 $btn .= '<a href="' . url('/kategori/' . $kategori->kategori_id . '/edit') . '"
                   class="btn btn-warning btn-sm"><i class="bi bi-pencil-square mr-2"></i>Edit</a> ';
-                $btn .= '<form class="d-inline-block" method="POST" action="' .
-                    url('/kategori/' . $kategori->kategori_id) . '">'
-                    . csrf_field() . method_field('DELETE') .
-                    '<button type="submit" class="btn btn-danger btn-sm"
-                  onclick="return confirm(\'Apakah Anda yakit menghapus data
-                  ini?\');"><i class="bi bi-trash mr-2"></i>Hapus</button></form>';
+                  $btn .= '<form class="d-inline-block" method="POST" action="' .
+                  url('/kategori/' . $kategori->kategori_id) . '">'
+                  . csrf_field() . method_field('DELETE') .
+                  '<button type="submit" class="btn btn-danger btn-sm"
+                  onclick="return confirm(\'Apakah Anda yakin menghapus data ini?\');">
+                  <i class="bi bi-trash mr-2"></i>Hapus</button></form>';              
                 return $btn;
             })
             ->rawColumns(['aksi'])
