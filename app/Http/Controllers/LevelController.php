@@ -169,7 +169,7 @@ class levelcontroller extends Controller
         }
         redirect('/');
     }
-
+    //edit ajax 
     public function edit_ajax(string $level_id){
         $level = levelmodel::find($level_id);
 
@@ -222,11 +222,11 @@ class levelcontroller extends Controller
     public function delete_ajax(Request $request, $level_id)
 {
     if ($request->ajax() || $request->wantsJson()) {
-        $user = levelmodel::find($level_id);
+        $level = levelmodel::find($level_id);
         
-        if ($user) {
+        if ($level) {
             try {
-                $user->delete();
+                $level->delete();
                 return response()->json([
                     'status' => true,
                     'message' => 'Data berhasil dihapus'
