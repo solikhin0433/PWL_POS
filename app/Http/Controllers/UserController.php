@@ -6,6 +6,7 @@ use App\Models\LevelModel;
 use App\Models\UserModel;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Support\Facades\Validator; 
 
 class userController extends Controller
 {
@@ -25,12 +26,15 @@ class userController extends Controller
 
         $level = LevelModel::all(); // ambil data level untuk filter level
 
-        return view('user.index', 
-        ['breadcrumb' => $breadcrumb,
-            'page' => $page,
-            'level' => $level,
-            'activeMenu' => $activeMenu
-        ]);
+        return view(
+            'user.index',
+            [
+                'breadcrumb' => $breadcrumb,
+                'page' => $page,
+                'level' => $level,
+                'activeMenu' => $activeMenu
+            ]
+        );
     }
     // Ambil data user dalam bentuk json untuk datatables 
     public function list(Request $request)
@@ -40,7 +44,7 @@ class userController extends Controller
         if ($request->level_id) {
             $users->where('level_id', $request->level_id);
         }
-        
+
         return DataTables::of($users)
             // menambahkan kolom index / no urut (default nama kolom: DT_RowIndex)
             ->addIndexColumn()
@@ -76,6 +80,14 @@ class userController extends Controller
             'level' => $level,
             'activeMenu' => $activeMenu
         ]);
+    }
+    // Create ajax
+    public function create_ajax()
+    {
+        $level = LevelModel::select('level_id', 'level_nama')->get();
+
+        return view('user.create_ajax')
+            ->with('level', $level);
     }
     // Menyimpan data user baru
     public function store(Request $request)
@@ -157,6 +169,37 @@ class userController extends Controller
         ]);
 
         return redirect('/user')->with('success', 'Data user berhasil diubah');
+    }
+    // Store Ajax
+    public function store_ajax(Request $request) {
+        // Cek apakah request berupa Ajax
+        if($request->ajax() || $request->wantsJson()) {
+            $rules = [
+                'level_id' => 'required|integer',
+                'username' => 'required|string|min:3|unique:m_user,username',
+                'nama' => 'required|string|max:100',
+                'password' => 'required|min:6'
+            ];
+    
+            // use Illuminate\Support\Facades\Validator;
+            $validator = Validator::make($request->all(), $rules);
+    
+            if($validator->fails()){
+                return response()->json([
+                    'status' => false, // response status, false: error/gagal, true: berhasil
+                    'message' => 'Validasi Gagal',
+                    'msgField' => $validator->errors() // pesan error validasi
+                ]);
+            }
+    
+            UserModel::create($request->all());
+            return response()->json([
+                'status' => true,
+                'message' => 'Data user berhasil disimpan'
+            ]);
+        }
+    
+        redirect('/');
     }
     // Menghapus data user
     public function destroy(string $id)

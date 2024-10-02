@@ -29,10 +29,13 @@ Route::group(['prefix'=>'user'], function(){
     Route::post('/list',[usercontroller::class, 'list']); //menampilkan data user dalam bentuk json untuk data tables
     Route::get('/create',[usercontroller::class,'create']); //menampilkan halaman form tambah user
     Route::post('/',[usercontroller::class,'store']); //menyimpan data user baru
+    Route::get('/create_ajax',[usercontroller::class, 'create_ajax']);//menampilkan halaman form tambah user ajax
+    Route::post('/ajax',[usercontroller::class, 'store_ajax']);//meyimpan data user baru ajax
     Route::get('/{id}',[usercontroller::class,'show']); //menampilkan detail user
     Route::get('/{id}/edit',[usercontroller::class,'edit']); //menampilkan halaman form edit
     Route::put('/{id}',[usercontroller::class,'update']);//meyimpan perubahan data user
     Route::delete('/{id}',[usercontroller::class,'destroy']);//menghapus data user
+   
 });
 Route::group(['prefix' => 'level'], function () {
     Route::get('/', [LevelController::class, 'index']);         // menampilkan halaman awal level
