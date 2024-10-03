@@ -46,7 +46,7 @@
                 <div class="form-group row">
                     <label class="col-1 control-label col-form-label">Harga beli</label>
                     <div class="col-11">
-                        <input type="number" class="form-control" id="harga_beli" name="harga_beli" required>
+                        <input type="text" class="form-control" id="harga_beli" name="harga_beli" required>
                         @error('harga_beli')
                             <small class="form-text text-danger">{{ $message }}</small>
                         @enderror
@@ -55,7 +55,7 @@
                     <div class="form-group row">
                          <label class="col-1 control-label col-form-label">Harga jual</label>
                          <div class="col-11">
-                             <input type="number" class="form-control" id="harga_jual" name="harga_jual" required>
+                             <input type="text" class="form-control" id="harga_jual" name="harga_jual" required>
                              @error('harga_jual')
                                  <small class="form-text text-danger">{{ $message }}</small>
                              @enderror

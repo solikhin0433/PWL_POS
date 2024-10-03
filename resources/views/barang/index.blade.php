@@ -5,6 +5,7 @@
             <h3 class="card-title">{{ $page->title }}</h3>
             <div class="card-tools">
                 <a class="btn btn-sm btn-primary mt-1" href="{{ url('barang/create') }}">Tambah</a>
+                <button onclick="modalAction('{{ url('/barang/create_ajax') }}')" class="btn btn-sm btn-success mt-1">Tambah Ajax</button>
             </div>
         </div>
         <div class="card-body">
@@ -30,7 +31,7 @@
                     </div>
                 </div>
             </div>
-            <table class="table table-bordered table-striped table-hover table-sm" id="table_user">
+            <table class="table table-bordered table-striped table-hover table-sm" id="table_barang">
                 <thead>
                     <tr>
                         <th>ID</th>
@@ -45,11 +46,18 @@
             </table>
         </div>
     </div>
+    <div id="myModal" class="modal fade animate shake" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" 
+    data-width="75%" aria-hidden="true"></div>
 @endsection
 @push('css')
 @endpush
 @push('js')
 <script>
+    function modalAction(url = '') {
+        $('#myModal').load(url, function() {
+            $('#myModal').modal('show');
+        });
+    }
      function formatRupiah(angka) {
          let numberString = angka.toString();
          let sisa = numberString.length % 3;
@@ -63,8 +71,9 @@
  
          return 'Rp ' + rupiah;
      }
+     var dataKategori;
      $(document).ready(function() {
-         var dataUser = $('#table_user').DataTable({
+         dataBarang = $('#table_barang').DataTable({
              serverSide: true,
              ajax: {
                  "url": "{{ url('barang/list') }}",
@@ -104,7 +113,7 @@
  
          // Reload data ketika kategori filter berubah
          $('#kategori_id').on('change', function() {
-             dataUser.ajax.reload();
+             dataBarang.ajax.reload();
          });
      });
  </script> 

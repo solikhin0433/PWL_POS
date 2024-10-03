@@ -78,6 +78,13 @@ Route::group(['prefix' => 'barang'], function () {
     Route::post('/list', [barangcontroller::class, 'list']);     // menampilkan data barang dalam bentuk json untuk datatables
     Route::get('/create', [barangcontroller::class, 'create']);  // menampilkan halaman form tambah barang
     Route::post('/', [barangcontroller::class,'store']);        // menyimpan data barang baru
+    Route::get('/create_ajax',[barangcontroller::class, 'create_ajax']);//menampilkan halaman form tambah user ajax
+    Route::post('/ajax',[barangcontroller::class, 'store_ajax']);//meyimpan data barang baru ajax
+    Route::get('/{id}/edit_ajax',[barangcontroller::class,'edit_ajax']); 
+    Route::put('/{id}/update_ajax',[barangcontroller::class,'update_ajax']);
+    Route::get('/{id}/delete_ajax',[barangcontroller::class,'confirm_ajax']);
+    Route::delete('/{id}/delete_ajax',[barangcontroller::class,'delete_ajax']);
+    Route::get('/{id}/show_ajax', [barangController :: class, 'show_ajax']);
     Route::get('/{id}', [barangcontroller::class,'show']);      // menampilkan detail barang
     Route::get('/{id}/edit', [barangcontroller::class, 'edit']); // menampilkan halaman form edit barang
     Route::put('/{id}', [barangcontroller::class, 'update']);    // menyimpan perubahan data barang
