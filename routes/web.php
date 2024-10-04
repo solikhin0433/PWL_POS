@@ -78,7 +78,7 @@ Route::group(['prefix' => 'barang'], function () {
     Route::post('/list', [barangcontroller::class, 'list']);     // menampilkan data barang dalam bentuk json untuk datatables
     Route::get('/create', [barangcontroller::class, 'create']);  // menampilkan halaman form tambah barang
     Route::post('/', [barangcontroller::class,'store']);        // menyimpan data barang baru
-    Route::get('/create_ajax',[barangcontroller::class, 'create_ajax']);//menampilkan halaman form tambah user ajax
+    Route::get('/create_ajax',[barangcontroller::class, 'create_ajax']);//menampilkan halaman form tambah barang ajax
     Route::post('/ajax',[barangcontroller::class, 'store_ajax']);//meyimpan data barang baru ajax
     Route::get('/{id}/edit_ajax',[barangcontroller::class,'edit_ajax']); 
     Route::put('/{id}/update_ajax',[barangcontroller::class,'update_ajax']);
@@ -95,6 +95,12 @@ Route::group(['prefix' => 'supplier'], function () {
     Route::post('/list', [suppliercontroller::class, 'list']);     // menampilkan data barang dalam bentuk json untuk datatables
     Route::get('/create', [suppliercontroller::class, 'create']);  // menampilkan halaman form tambah barang
     Route::post('/', [suppliercontroller::class,'store']);        // menyimpan data barang baru
+    Route::get('/create_ajax',[suppliercontroller::class, 'create_ajax']);//menampilkan halaman form tambah supplier ajax
+    Route::post('/ajax',[suppliercontroller::class, 'store_ajax']);//meyimpan data supplier baru ajax
+    Route::get('/{id}/edit_ajax',[suppliercontroller::class,'edit_ajax']); 
+    Route::put('/{id}/update_ajax',[suppliercontroller::class,'update_ajax']);
+    Route::get('/{id}/delete_ajax',[suppliercontroller::class,'confirm_ajax']);
+    Route::delete('/{id}/delete_ajax',[suppliercontroller::class,'delete_ajax']);
     Route::get('/{id}', [suppliercontroller::class,'show']);      // menampilkan detail barang
     Route::get('/{id}/edit', [suppliercontroller::class, 'edit']); // menampilkan halaman form edit barang
     Route::put('/{id}', [suppliercontroller::class, 'update']);    // menyimpan perubahan data barang
