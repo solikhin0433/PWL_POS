@@ -230,5 +230,22 @@ class SupplierController extends Controller
 
     return redirect('/');
 }
+// show ajax
+public function show_ajax(string $id) {
+    // Cari level berdasarkan id
+    $supplier = supplierModel::find($id);
+
+    // Periksa apakah level ditemukan
+    if ($supplier) {
+        // Tampilkan halaman show_ajax dengan data supplier
+        return view('supplier.show_ajax', ['supplier' => $supplier]);
+    } else {
+        // Tampilkan pesan kesalahan jika supplier tidak ditemukan
+        return response()->json([
+            'status' => false,
+            'message' => 'Data tidak ditemukan'
+        ]);
+    }
+}
 
 }

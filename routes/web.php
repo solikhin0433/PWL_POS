@@ -8,6 +8,7 @@ use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\levelcontroller;
 use App\Http\Controllers\usercontroller;
 use App\Http\Controllers\welcomeController;
+use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -20,9 +21,14 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+Route::pattern('id', '[0-9]+'); // artinya ketika ada parameter (id), maka harus berupa angka
 
-
-Route::get('/',[welcomeController::class,'index']);
+Route::get('login', [AuthController::class, 'login'])->name('login');
+Route::post('login', [AuthController::class, 'postlogin']);
+Route::get('logout', [AuthController::class, 'logout'])->middleware('auth');
+Route::middleware('auth')->group(function () {
+    // artinya semua route di dalam group ini harus login dulu
+    Route::get('/',[welcomeController::class,'index']);
 
 Route::group(['prefix'=>'user'], function(){
     Route::get('/', [usercontroller::class, 'index']); //menampilkan halaman awal user
@@ -38,6 +44,7 @@ Route::group(['prefix'=>'user'], function(){
     Route::put('/{id}/update_ajax',[usercontroller::class,'update_ajax']);// update ajax
     Route::get('/{id}/delete_ajax',[usercontroller::class,'confirm_ajax']);
     Route::delete('/{id}/delete_ajax',[usercontroller::class,'delete_ajax']);
+    Route::get('/{id}/show_ajax', [userController :: class, 'show_ajax']);
     Route::delete('/{id}',[usercontroller::class,'destroy']);//menghapus data user
    
 });
@@ -55,6 +62,7 @@ Route::group(['prefix' => 'level'], function () {
     Route::put('/{id}', [LevelController::class, 'update']);    // menyimpan perubahan data level
     Route::get('/{id}/delete_ajax',[Levelcontroller::class,'confirm_ajax']);
     Route::delete('/{id}/delete_ajax',[Levelcontroller::class,'delete_ajax']);
+    Route::get('/{id}/show_ajax', [LevelController :: class, 'show_ajax']);
     Route::delete('/{id}', [LevelController::class, 'destroy']); // menghapus data level
 });
 Route::group(['prefix' => 'kategori'], function () {
@@ -71,6 +79,7 @@ Route::group(['prefix' => 'kategori'], function () {
     Route::put('/{id}', [kategoricontroller::class, 'update']);    // menyimpan perubahan data kategori
     Route::get('/{id}/delete_ajax',[kategoricontroller::class,'confirm_ajax']);
     Route::delete('/{id}/delete_ajax',[kategoricontroller::class,'delete_ajax']);
+    Route::get('/{id}/show_ajax', [kategoriController :: class, 'show_ajax']);
     Route::delete('/{id}', [kategoricontroller::class, 'destroy']); // menghapus data kategori
 });
 Route::group(['prefix' => 'barang'], function () {
@@ -101,6 +110,7 @@ Route::group(['prefix' => 'supplier'], function () {
     Route::put('/{id}/update_ajax',[suppliercontroller::class,'update_ajax']);
     Route::get('/{id}/delete_ajax',[suppliercontroller::class,'confirm_ajax']);
     Route::delete('/{id}/delete_ajax',[suppliercontroller::class,'delete_ajax']);
+    Route::get('/{id}/show_ajax', [supplierController :: class, 'show_ajax']);
     Route::get('/{id}', [suppliercontroller::class,'show']);      // menampilkan detail barang
     Route::get('/{id}/edit', [suppliercontroller::class, 'edit']); // menampilkan halaman form edit barang
     Route::put('/{id}', [suppliercontroller::class, 'update']);    // menyimpan perubahan data barang
@@ -115,4 +125,5 @@ Route::group(['prefix' => 'stok'], function () {
     Route::get('/{id}/edit', [stokcontroller::class, 'edit']);  // Menampilkan halaman form edit stok
     Route::put('/{id}', [stokcontroller::class, 'update']);     // Menyimpan perubahan data stok
     Route::delete('/{id}', [stokcontroller::class, 'destroy']); // Menghapus data stok
+});
 });

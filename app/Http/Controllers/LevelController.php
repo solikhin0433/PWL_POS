@@ -247,4 +247,21 @@ class levelcontroller extends Controller
 
     return redirect('/');
 }
+// show ajax
+public function show_ajax(string $id) {
+    // Cari level berdasarkan id
+    $level = LevelModel::find($id);
+
+    // Periksa apakah level ditemukan
+    if ($level) {
+        // Tampilkan halaman show_ajax dengan data level
+        return view('level.show_ajax', ['level' => $level]);
+    } else {
+        // Tampilkan pesan kesalahan jika level tidak ditemukan
+        return response()->json([
+            'status' => false,
+            'message' => 'Data tidak ditemukan'
+        ]);
+    }
+}
 }
