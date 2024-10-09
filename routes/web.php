@@ -66,7 +66,7 @@ Route::group(['prefix' => 'level', 'middleware'=>'authorize:ADM'], function () {
     Route::get('/{id}/show_ajax', [LevelController :: class, 'show_ajax']);
     Route::delete('/{id}', [LevelController::class, 'destroy']); // menghapus data level
 });
-Route::group(['prefix' => 'kategori'], function () {
+Route::group(['prefix' => 'kategori', 'middleware'=>'authorize:ADM,MNG,STF'], function () {
     Route::get('/', [kategoricontroller::class, 'index']);         // menampilkan halaman awal kategori
     Route::post('/list', [kategoricontroller::class, 'list']);     // menampilkan data kategori dalam bentuk json untuk datatables
     Route::get('/create', [kategoricontroller::class, 'create']);  // menampilkan halaman form tambah kategori
@@ -83,7 +83,7 @@ Route::group(['prefix' => 'kategori'], function () {
     Route::get('/{id}/show_ajax', [kategoriController :: class, 'show_ajax']);
     Route::delete('/{id}', [kategoricontroller::class, 'destroy']); // menghapus data kategori
 });
-Route::group(['prefix' => 'barang'], function () {
+Route::group(['prefix' => 'barang', 'middleware'=>'authorize:ADM,MNG,STF'], function () {
     Route::get('/', [barangcontroller::class, 'index']);         // menampilkan halaman awal barang
     Route::post('/list', [barangcontroller::class, 'list']);     // menampilkan data barang dalam bentuk json untuk datatables
     Route::get('/create', [barangcontroller::class, 'create']);  // menampilkan halaman form tambah barang
@@ -100,7 +100,7 @@ Route::group(['prefix' => 'barang'], function () {
     Route::put('/{id}', [barangcontroller::class, 'update']);    // menyimpan perubahan data barang
     Route::delete('/{id}', [barangcontroller::class, 'destroy']); // menghapus data barang
 });
-Route::group(['prefix' => 'supplier'], function () {
+Route::group(['prefix' => 'supplier', 'middleware'=>'authorize:ADM,MNG,'], function () {
     Route::get('/', [suppliercontroller::class, 'index']);         // menampilkan halaman awal barang
     Route::post('/list', [suppliercontroller::class, 'list']);     // menampilkan data barang dalam bentuk json untuk datatables
     Route::get('/create', [suppliercontroller::class, 'create']);  // menampilkan halaman form tambah barang
