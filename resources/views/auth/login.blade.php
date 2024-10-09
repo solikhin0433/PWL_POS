@@ -23,7 +23,7 @@ href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&d
   <!-- /.login-logo --> 
   <div class="card card-outline card-primary"> 
     <div class="card-header text-center"><a href="{{ url('/') }}" 
-class="h1"><b>Admin</b>LTE</a></div> 
+class="h1"><b>Login</b></a></div> 
     <div class="card-body"> 
       <p class="login-box-msg">Sign in to start your session</p> 
       <form action="{{ url('login') }}" method="POST" id="form-login"> 
@@ -61,6 +61,9 @@ placeholder="Password">
           <!-- /.col --> 
         </div> 
       </form> 
+      <div>
+          <a href="{{url('register')}}">Registrasi</a>
+      </div>
     </div> 
     <!-- /.card-body --> 
   </div> 
