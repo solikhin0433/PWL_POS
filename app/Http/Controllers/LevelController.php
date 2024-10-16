@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\levelmodel;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -379,5 +380,26 @@ public function import()
         // Simpan file dan kirim ke output
         $writer->save('php://output');
         exit;
+    }
+    public function export_pdf()
+    {
+        // Ambil data barang dari database
+        $level = LevelModel::select('level_kode', 'level_nama') 
+        ->get();
+
+        // Gunakan library Dompdf untuk membuat PDF
+        $pdf = Pdf::loadView('level.export_pdf', ['level' => $level]);
+
+        // Atur ukuran kertas dan orientasi
+        $pdf->setPaper('A4', 'portrait');
+
+        // Aktifkan opsi untuk memuat gambar dari URL (jika ada)
+        $pdf->setOption('isRemoteEnabled', true);
+
+        // Render PDF
+        $pdf->render();
+
+        // Download PDF
+        return $pdf->stream('Data Level ' . date('Y-m-d H:i:s') . '.pdf');
     }
 }
