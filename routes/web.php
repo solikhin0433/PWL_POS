@@ -128,6 +128,8 @@ Route::middleware('auth')->group(function () {
         Route::get('/{id}/edit', [suppliercontroller::class, 'edit']); // menampilkan halaman form edit barang
         Route::put('/{id}', [suppliercontroller::class, 'update']);    // menyimpan perubahan data barang
         Route::delete('/{id}', [suppliercontroller::class, 'destroy']); // menghapus data barang
+        Route::get('/import', [suppliercontroller::class, 'import']); // ajax form upload excel
+        Route::post('/import_ajax', [suppliercontroller::class, 'import_ajax']); // ajax import excel
     });
     Route::group(['prefix' => 'stok'], function () {
         Route::get('/', [stokcontroller::class, 'index']);          // Menampilkan halaman awal stok
