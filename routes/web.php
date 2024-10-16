@@ -53,7 +53,7 @@ Route::middleware('auth')->group(function () {
         Route::delete('/{id}', [usercontroller::class, 'destroy']); //menghapus data user
         Route::get('/import', [userController::class, 'import']); // ajax form upload excel
         Route::post('/import_ajax', [userController::class, 'import_ajax']); // ajax import excel
-        Route::get('/export_excel', [UserController::class, 'export_excel']); // ajax import excel
+        Route::get('/export_excel', [UserController::class, 'export_excel']); // ajax exsport excel
 
     });
     Route::group(['prefix' => 'level', 'middleware' => 'authorize:ADM'], function () {
