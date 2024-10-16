@@ -103,6 +103,8 @@ Route::middleware('auth')->group(function () {
         Route::get('/{id}/edit', [barangcontroller::class, 'edit']); // menampilkan halaman form edit barang
         Route::put('/{id}', [barangcontroller::class, 'update']);    // menyimpan perubahan data barang
         Route::delete('/{id}', [barangcontroller::class, 'destroy']); // menghapus data barang
+        Route::get('/import', [BarangController::class, 'import']); // ajax form upload excel
+        Route::post('/import_ajax', [BarangController::class, 'import_ajax']); // ajax import excel
     });
     Route::group(['prefix' => 'supplier', 'middleware' => 'authorize:ADM,MNG,'], function () {
         Route::get('/', [suppliercontroller::class, 'index']);         // menampilkan halaman awal barang
