@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\levelmodel;
+use App\Models\User;
 use App\Models\usermodel;
+use Barryvdh\DomPDF\Facade\Pdf;
 use PhpOffice\PhpSpreadsheet\IOFactory; 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -370,7 +372,7 @@ class usercontroller extends Controller
     }
     public function export_excel()
     {
-        $barang = usermodel::select('level_id', 'username', 'nama')
+        $user = usermodel::select('level_id', 'username', 'nama')
             ->orderBy('level_id')
             ->with('level')
             ->get();
@@ -390,7 +392,7 @@ class usercontroller extends Controller
 
         $no = 1; // Nomor data dimulai dari 1
         $baris = 2; // Baris data dimulai dari baris ke-2
-        foreach ($barang as $key => $value) {
+        foreach ($user as $key => $value) {
             $sheet->setCellValue('A' . $baris, $no);
             $sheet->setCellValue('B' . $baris, $value->level_id);
             $sheet->setCellValue('C' . $baris, $value->username);
@@ -402,7 +404,7 @@ class usercontroller extends Controller
         }
 
         // Set ukuran kolom otomatis untuk semua kolom
-        foreach (range('A', 'F') as $columnID) {
+        foreach (range('A', 'E') as $columnID) {
             $sheet->getColumnDimension($columnID)->setAutoSize(true);
         }
 
@@ -427,4 +429,26 @@ class usercontroller extends Controller
         $writer->save('php://output');
         exit;
     }
+    public function export_pdf()
+{
+    // Ambil data user dari database
+    $user = usermodel::select('level_id', 'username', 'nama') // Pilih kolom yang diperlukan
+        ->orderBy('level_id')
+        ->orderBy('username')
+        ->with('level') 
+        ->get();
+
+    // Gunakan library Dompdf untuk membuat PDF
+    $pdf = Pdf::loadView('user.export_pdf', ['user' => $user]); // Ganti 'User' menjadi 'user'
+
+    // Atur ukuran kertas dan orientasi
+    $pdf->setPaper('A4', 'portrait');
+
+    // Aktifkan opsi untuk memuat gambar dari URL (jika ada)
+    $pdf->setOption('isRemoteEnabled', true);
+    
+    // Render PDF dan tampilkan di browser
+    return $pdf->stream('Data User ' . date('Y-m-d H:i:s') . '.pdf');
+}
+
 }
