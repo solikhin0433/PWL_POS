@@ -343,7 +343,7 @@ class usercontroller extends Controller
                             'level_id' => $value['A'], 
                             'username' => $value['B'], 
                             'nama' => $value['C'], 
-                            'password' => $value['D'],  
+                            'password' =>Hash::make($value['D']),  
                             'created_at' => now(), 
                         ]; 
                     } 
