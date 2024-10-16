@@ -51,6 +51,8 @@ Route::middleware('auth')->group(function () {
         Route::delete('/{id}/delete_ajax', [usercontroller::class, 'delete_ajax']);
         Route::get('/{id}/show_ajax', [userController::class, 'show_ajax']);
         Route::delete('/{id}', [usercontroller::class, 'destroy']); //menghapus data user
+        Route::get('/import', [userController::class, 'import']); // ajax form upload excel
+        Route::post('/import_ajax', [userController::class, 'import_ajax']); // ajax import excel
 
     });
     Route::group(['prefix' => 'level', 'middleware' => 'authorize:ADM'], function () {
