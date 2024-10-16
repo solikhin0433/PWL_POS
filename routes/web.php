@@ -53,6 +53,7 @@ Route::middleware('auth')->group(function () {
         Route::delete('/{id}', [usercontroller::class, 'destroy']); //menghapus data user
         Route::get('/import', [userController::class, 'import']); // ajax form upload excel
         Route::post('/import_ajax', [userController::class, 'import_ajax']); // ajax import excel
+        Route::get('/export_excel', [UserController::class, 'export_excel']); // ajax import excel
 
     });
     Route::group(['prefix' => 'level', 'middleware' => 'authorize:ADM'], function () {
@@ -111,6 +112,8 @@ Route::middleware('auth')->group(function () {
         Route::delete('/{id}', [barangcontroller::class, 'destroy']); // menghapus data barang
         Route::get('/import', [BarangController::class, 'import']); // ajax form upload excel
         Route::post('/import_ajax', [BarangController::class, 'import_ajax']); // ajax import excel
+        Route::get('/export_excel', [BarangController::class, 'export_excel']); // ajax import excel
+        
     });
     Route::group(['prefix' => 'supplier', 'middleware' => 'authorize:ADM,MNG,'], function () {
         Route::get('/', [suppliercontroller::class, 'index']);         // menampilkan halaman awal barang
