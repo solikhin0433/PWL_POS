@@ -7,8 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\Facades\DataTables;
-use PhpOffice\PhpSpreadsheet\IOFactory; 
-
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
 
 class levelcontroller extends Controller
 {
@@ -325,5 +325,59 @@ public function import()
             } 
         } 
         return redirect('/'); 
+    }
+        public function export_excel()
+    {
+        // Ambil data dari Levelmodel
+        $barang = Levelmodel::select('level_kode', 'level_nama')->get();
+
+        // Inisialisasi Spreadsheet
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet(); // Ambil sheet yang aktif
+
+        // Set Header Kolom
+        $sheet->setCellValue('A1', 'No');
+        $sheet->setCellValue('B1', 'Level Kode');
+        $sheet->setCellValue('C1', 'Nama Level');
+
+        // Buat header menjadi bold
+        $sheet->getStyle('A1:C1')->getFont()->setBold(true);
+
+        // Isi data
+        $no = 1; // Nomor data dimulai dari 1
+        $baris = 2; // Baris data dimulai dari baris ke-2
+        foreach ($barang as $key => $value) {
+            $sheet->setCellValue('A' . $baris, $no);
+            $sheet->setCellValue('B' . $baris, $value->level_kode);
+            $sheet->setCellValue('C' . $baris, $value->level_nama);
+
+            $baris++;
+            $no++;
+        }
+
+        // Set ukuran kolom otomatis untuk semua kolom
+        foreach (range('A', 'C') as $columnID) {
+            $sheet->getColumnDimension($columnID)->setAutoSize(true);
+        }
+
+        // Set judul sheet
+        $sheet->setTitle('Data Level');
+
+        // Buat writer untuk menulis file excel
+        $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
+        $filename = 'Data Level_' . date('Y-m-d_His') . '.xlsx';
+
+        // Atur Header untuk Download File Excel
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="' . $filename . '"');
+        header('Cache-Control: max-age=0');
+        header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
+        header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT');
+        header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+        header('Pragma: public');
+
+        // Simpan file dan kirim ke output
+        $writer->save('php://output');
+        exit;
     }
 }
