@@ -137,6 +137,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/import', [suppliercontroller::class, 'import']); // ajax form upload excel
         Route::post('/import_ajax', [suppliercontroller::class, 'import_ajax']); // ajax import excel
         Route::get('/export_excel', [supplierController::class, 'export_excel']); // ajax import excel
+        Route::get('/export_pdf', [supplierController::class, 'export_pdf']);// export pdf
     });
     Route::group(['prefix' => 'stok'], function () {
         Route::get('/', [stokcontroller::class, 'index']);          // Menampilkan halaman awal stok

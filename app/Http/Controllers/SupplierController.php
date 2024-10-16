@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Models\SupplierModel;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Yajra\DataTables\Facades\DataTables; 
 use Illuminate\Support\Facades\Validator;
 use PhpOffice\PhpSpreadsheet\IOFactory; 
@@ -365,4 +366,26 @@ public function import()
         $writer->save('php://output');
         exit;
     }
+    public function export_pdf()
+{
+    // Ambil data barang dari database
+    $barang = SupplierModel::select('supplier_kode', 'supplier_nama', 'supplier_alamat')
+
+        ->get();
+
+    // Gunakan library Dompdf untuk membuat PDF
+    $pdf = Pdf::loadView('supplier.export_pdf', ['supplier' => $barang]);
+
+    // Atur ukuran kertas dan orientasi
+    $pdf->setPaper('A4', 'portrait');
+
+    // Aktifkan opsi untuk memuat gambar dari URL (jika ada)
+    $pdf->setOption('isRemoteEnabled', true);
+
+    // Render PDF
+    $pdf->render();
+
+    // Download PDF
+    return $pdf->stream('Data Supplier ' . date('Y-m-d H:i:s') . '.pdf');
+}
 }
