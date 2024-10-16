@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\LevelModel;
 use App\Models\BarangModel;
 use App\Models\KategoriModel;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use PhpOffice\PhpSpreadsheet\IOFactory;
@@ -460,4 +461,28 @@ class BarangController extends Controller
         $writer->save('php://output');
         exit;
     }
+    public function export_pdf()
+{
+    // Ambil data barang dari database
+    $barang = BarangModel::select('kategori_id', 'barang_kode', 'barang_nama', 'harga_beli', 'harga_jual')
+        ->orderBy('kategori_id')
+        ->orderBy('barang_kode')
+        ->with('kategori')
+        ->get();
+
+    // Gunakan library Dompdf untuk membuat PDF
+    $pdf = Pdf::loadView('barang.export_pdf', ['barang' => $barang]);
+
+    // Atur ukuran kertas dan orientasi
+    $pdf->setPaper('A4', 'portrait');
+
+    // Aktifkan opsi untuk memuat gambar dari URL (jika ada)
+    $pdf->setOption('isRemoteEnabled', true);
+
+    // Render PDF
+    $pdf->render();
+
+    // Download PDF
+    return $pdf->stream('Data Barang ' . date('Y-m-d H:i:s') . '.pdf');
+}
 }
