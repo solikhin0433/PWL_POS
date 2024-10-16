@@ -55,7 +55,7 @@ warning">Batal</button>
                                 title: 'Berhasil', 
                                 text: response.message 
                             }); 
-                            tableBarang.ajax.reload(); // reload datatable 
+                            dataBarang.ajax.reload(); // reload datatable 
                         }else{ // jika error 
                             $('.error-text').text(''); 
                             $.each(response.msgField, function(prefix, val) { 
