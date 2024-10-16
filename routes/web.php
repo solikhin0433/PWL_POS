@@ -90,6 +90,8 @@ Route::middleware('auth')->group(function () {
         Route::delete('/{id}/delete_ajax', [kategoricontroller::class, 'delete_ajax']);
         Route::get('/{id}/show_ajax', [kategoriController::class, 'show_ajax']);
         Route::delete('/{id}', [kategoricontroller::class, 'destroy']); // menghapus data kategori
+        Route::get('/import', [kategoricontroller::class, 'import']); // ajax form upload excel
+        Route::post('/import_ajax', [kategoricontroller::class, 'import_ajax']); // ajax import excel
     });
     Route::group(['prefix' => 'barang', 'middleware' => 'authorize:ADM,MNG,STF'], function () {
         Route::get('/', [barangcontroller::class, 'index']);         // menampilkan halaman awal barang
