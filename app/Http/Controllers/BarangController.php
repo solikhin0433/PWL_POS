@@ -462,27 +462,27 @@ class BarangController extends Controller
         exit;
     }
     public function export_pdf()
-{
-    // Ambil data barang dari database
-    $barang = BarangModel::select('kategori_id', 'barang_kode', 'barang_nama', 'harga_beli', 'harga_jual')
-        ->orderBy('kategori_id')
-        ->orderBy('barang_kode')
-        ->with('kategori')
-        ->get();
+    {
+        // Ambil data barang dari database
+        $barang = BarangModel::select('kategori_id', 'barang_kode', 'barang_nama', 'harga_beli', 'harga_jual')
+            ->orderBy('kategori_id')
+            ->orderBy('barang_kode')
+            ->with('kategori')
+            ->get();
 
-    // Gunakan library Dompdf untuk membuat PDF
-    $pdf = Pdf::loadView('barang.export_pdf', ['barang' => $barang]);
+        // Gunakan library Dompdf untuk membuat PDF
+        $pdf = Pdf::loadView('barang.export_pdf', ['barang' => $barang]);
 
-    // Atur ukuran kertas dan orientasi
-    $pdf->setPaper('A4', 'portrait');
+        // Atur ukuran kertas dan orientasi
+        $pdf->setPaper('A4', 'portrait');
 
-    // Aktifkan opsi untuk memuat gambar dari URL (jika ada)
-    $pdf->setOption('isRemoteEnabled', true);
+        // Aktifkan opsi untuk memuat gambar dari URL (jika ada)
+        $pdf->setOption('isRemoteEnabled', true);
 
-    // Render PDF
-    $pdf->render();
+        // Render PDF
+        $pdf->render();
 
-    // Download PDF
-    return $pdf->stream('Data Barang ' . date('Y-m-d H:i:s') . '.pdf');
-}
+        // Download PDF
+        return $pdf->stream('Data Barang ' . date('Y-m-d H:i:s') . '.pdf');
+    }
 }
