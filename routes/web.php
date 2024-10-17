@@ -31,9 +31,16 @@ Route::get('logout', [AuthController::class, 'logout'])->middleware('auth');
 Route::get('register', [RegisterController::class, 'register'])->name('register');
 Route::post('register', [RegisterController::class, 'store']);
 
+
 Route::middleware('auth')->group(function () {
     // artinya semua route di dalam group ini harus login dulu
     Route::get('/', [welcomeController::class, 'index']);
+
+    Route::group(['prefix'=>'profile'], function(){
+    Route::get('/edit', [UserController::class, 'profile']);
+    Route::post('/update_profile', [UserController::class, 'update_profile']);
+    });
+    
 
     Route::group(['prefix' => 'user', 'middleware' => 'authorize:ADM'], function () {
         Route::get('/', [usercontroller::class, 'index']); //menampilkan halaman awal user

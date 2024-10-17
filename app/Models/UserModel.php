@@ -19,7 +19,8 @@ class UserModel extends Authenticatable
         'nama',
         'level_id',
         'created_at',
-        'updated_at'
+        'updated_at',
+        'avatar'
     ];
 
     protected $hidden = ['password']; // jangan tampilkan saat select
@@ -46,4 +47,5 @@ class UserModel extends Authenticatable
    {
        return $this->level->level_kode;
    }
+   
 }

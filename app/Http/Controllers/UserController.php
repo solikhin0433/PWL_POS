@@ -8,7 +8,9 @@ use App\Models\usermodel;
 use Barryvdh\DomPDF\Facade\Pdf;
 use PhpOffice\PhpSpreadsheet\IOFactory; 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use Yajra\DataTables\DataTables;
@@ -449,6 +451,46 @@ class usercontroller extends Controller
     
     // Render PDF dan tampilkan di browser
     return $pdf->stream('Data User ' . date('Y-m-d H:i:s') . '.pdf');
-}
+}   
 
+public function profile()
+{
+    $breadcrumb = (object)[
+        'title' => 'Profil Saya',
+        'list' => ['Home', 'Profil'],
+    ];
+
+    $page = (object)[
+        'title' => 'Edit Profil Pengguna'
+    ];
+
+    $activeMenu = 'profile'; // Set menu yang aktif
+
+    // Ambil data pengguna yang sedang login
+    $user = Auth::user();
+
+    // Pastikan user tidak null
+    if (!$user) {
+        return redirect()->route('login')->with('error', 'Silakan login terlebih dahulu.');
+    }
+    // Ambil level_nama dari tabel m_level
+    $level_nama = $user->level ? $user->level->level_nama : 'Tidak ada level'; // Menangani jika level tidak ada
+
+    return view('profile.index', [
+        'breadcrumb' => $breadcrumb,
+        'page' => $page,
+        'activeMenu' => $activeMenu,
+        'user' => $user,
+        'level_nama' => $level_nama // Kirim level_nama ke view
+    ]);
+}
+    public function update_profile(Request $request){
+        $avatar = $request->file('avatar')->store('avatars');
+        $request->user()->update([
+           'avatar' => $avatar
+        ]);
+
+        return redirect()->back();
+         
+}
 }

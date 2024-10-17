@@ -71,7 +71,7 @@
         </tr> 
     </table> 
  
-    <h3 class="text-center">LAPORAN DATA SUPPLIER</h3> 
+    <h3 class="text-center">LAPORAN DATA LEVEL</h3> 
     <table class="border-all"> 
         <thead> 
             <tr> 
