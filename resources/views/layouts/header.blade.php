@@ -88,19 +88,30 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body text-center"> <!-- Centered text -->
-                <!-- Profile Information -->
+            <div class="modal-body text-center">
+                <!-- Avatar -->
                 <img src="{{ auth()->user()->avatar ? asset('storage/' . auth()->user()->avatar) : asset('default.png') }}"
                     alt="User Avatar" class="img-circle mb-3" width="100" height="100">
-                <p><strong>Username:</strong> {{ auth()->user()->username }}</p>
-                <p><strong>Nama:</strong> {{ auth()->user()->nama }}</p>
-                <p><strong>Level:</strong>
+            
+                <!-- Profile Information with Icons -->
+                <p><strong><i class="fas fa-user"></i> Username:</strong> {{ auth()->user()->username }}</p>
+                <p><strong><i class="fas fa-id-card"></i> Nama:</strong> {{ auth()->user()->nama }}</p>
+                <p><strong><i class="fas fa-user-tag"></i> Level:</strong>
                     {{ auth()->user()->level ? auth()->user()->level->level_nama : 'Tidak ada level' }}</p>
             </div>
+            
             <div class="modal-footer justify-content-center"> <!-- Centered footer -->
-                <button type="button" class="btn btn-danger" data-dismiss="modal" id="logout-link">Logout</button>
-                <a href="{{ url('profile/edit') }}" class="btn btn-primary">Edit Profile</a>
+                <!-- Logout Button with Icon -->
+                <button type="button" class="btn btn-danger" data-dismiss="modal" id="logout-link">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            
+                <!-- Edit Profile Button with Icon -->
+                <a href="{{ url('profile/edit') }}" class="btn btn-primary">
+                    <i class="fas fa-edit"></i> Edit Profile
+                </a>
             </div>
+            
         </div>
     </div>
 </div>
