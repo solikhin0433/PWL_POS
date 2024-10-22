@@ -63,12 +63,13 @@
             </a>
         </li>
 
-        <!-- Profile Icon -->
-        <li class="nav-item">
-            <a id="profile" class="nav-link" href="#" role="button">
-                <i class="fas fa-user"></i>
-            </a>
-        </li>
+      <!-- Profile Icon -->
+<li class="nav-item">
+    <a id="profile" class="nav-link" href="#" role="button">
+        <img src="{{ auth()->user()->avatar ? asset('storage/' . auth()->user()->avatar) : asset('default.png') }}"
+            alt="User Avatar" class="img-circle" width="30" height="30" style="object-fit: cover;">
+    </a>
+</li>
 
         <!-- Logout Form -->
         <form id="logout-form" action="{{ url('logout') }}" method="get" style="display: none;">
@@ -77,7 +78,8 @@
     </ul>
 </nav>
 <!-- Profile Modal -->
-<div class="modal fade" id="profileModal" tabindex="-1" role="dialog" aria-labelledby="profileModalLabel" aria-hidden="true">
+<div class="modal fade" id="profileModal" tabindex="-1" role="dialog" aria-labelledby="profileModalLabel"
+    aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document"> <!-- Modal dialog centered -->
         <div class="modal-content">
             <div class="modal-header">
@@ -88,14 +90,12 @@
             </div>
             <div class="modal-body text-center"> <!-- Centered text -->
                 <!-- Profile Information -->
-                <img 
-                    src="{{ auth()->user()->avatar ? asset('storage/' . auth()->user()->avatar) : asset('foto.png') }}" 
-                    alt="User Avatar" 
-                    class="img-circle mb-3" 
-                    width="100">
+                <img src="{{ auth()->user()->avatar ? asset('storage/' . auth()->user()->avatar) : asset('default.png') }}"
+                    alt="User Avatar" class="img-circle mb-3" width="100" height="100">
                 <p><strong>Username:</strong> {{ auth()->user()->username }}</p>
                 <p><strong>Nama:</strong> {{ auth()->user()->nama }}</p>
-                <p><strong>Level:</strong> {{ auth()->user()->level ? auth()->user()->level->level_nama : 'Tidak ada level' }}</p>
+                <p><strong>Level:</strong>
+                    {{ auth()->user()->level ? auth()->user()->level->level_nama : 'Tidak ada level' }}</p>
             </div>
             <div class="modal-footer justify-content-center"> <!-- Centered footer -->
                 <button type="button" class="btn btn-danger" data-dismiss="modal" id="logout-link">Logout</button>
@@ -112,7 +112,7 @@
 <script>
     document.getElementById('profile').addEventListener('click', function(e) {
         e.preventDefault();
-        $('#profileModal').modal('show');  // Trigger the modal
+        $('#profileModal').modal('show'); // Trigger the modal
     });
 
     document.getElementById('logout-link').addEventListener('click', function(e) {
