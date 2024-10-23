@@ -1,6 +1,13 @@
 <!DOCTYPE html> 
 <html lang="en"> 
 <head> 
+  <!-- Latar belakang -->
+  <style>
+    body.login-page {
+        background: url('{{ asset('bg.jpg') }}');
+        background-size: cover;
+    }
+</style>
   <meta charset="utf-8"> 
   <meta name="viewport" content="width=device-width, initial-scale=1"> 
   <title>Login Pengguna</title> 
