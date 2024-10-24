@@ -9,9 +9,12 @@
                     <div class="card-body text-center">
                         <!-- Placeholder Gambar Profil -->
                         <div class="profile-picture mb-3">
-                            <img src="{{ auth()->user()->avatar ? asset('storage/' . auth()->user()->avatar) : asset('default.png') }}"
+                            <!-- Avatar di halaman profil -->
+                            <img id="profile-avatar"
+                                src="{{ auth()->user()->avatar ? asset('storage/' . auth()->user()->avatar) : asset('default.png') }}"
                                 alt="User Avatar" class="img-circle rounded-circle" width="100" height="100"
                                 style="object-fit: cover;">
+
                         </div>
 
                         <!-- Nama Pengguna -->
@@ -31,8 +34,9 @@
                                     <label class="custom-file-label" for="avatar">Browse</label>
                                 </div>
 
-                              <!-- Tombol Ganti Profil dengan Ikon -->
-<button type="submit" class="btn btn-success mt-3"><i class="fas fa-user-edit"></i> Ganti Profil</button>
+                                <!-- Tombol Ganti Profil dengan Ikon -->
+                                <button type="submit" class="btn btn-success mt-3"><i class="fas fa-user-edit"></i> Ganti
+                                    Profil</button>
                             </div>
                         </form>
 
@@ -41,13 +45,13 @@
                             @csrf
                             <button type="submit" class="btn btn-danger">
                                 <i class="fas fa-trash-alt"></i> Hapus Profil
-                            </button>  
+                            </button>
                         </form>
                         <script>
                             document.getElementById('avatar').addEventListener('change', function() {
                                 var fileInput = document.getElementById('avatar');
                                 var fileName = fileInput.files.length > 0 ? fileInput.files[0].name :
-                                "Browse"; // Nama file yang dipilih
+                                    "Browse"; // Nama file yang dipilih
                                 var label = document.querySelector('.custom-file-label');
 
                                 // Menampilkan nama file di label
@@ -155,7 +159,7 @@
                                         <button type="submit" class="btn btn-primary">
                                             <i class="fas fa-save"></i> Simpan Perubahan
                                         </button>
-                                        
+
                                     </div>
                                 </div>
                             </form>
@@ -184,7 +188,8 @@
 
                                 <!-- New Password -->
                                 <div class="form-group row">
-                                    <label for="password" class="col-md-4 col-form-label">{{ __('Password Baru') }}</label>
+                                    <label for="password"
+                                        class="col-md-4 col-form-label">{{ __('Password Baru') }}</label>
                                     <div class="col-md-8">
                                         <input type="password" class="form-control" name="password" required>
                                         <small id="error-password" class="error-text form-text text-danger">
@@ -216,7 +221,7 @@
                                         <button type="submit" class="btn btn-primary">
                                             <i class="fas fa-lock"></i> Update Password
                                         </button>
-                                        
+
                                     </div>
                                 </div>
                             </form>
@@ -230,70 +235,78 @@
 @endsection
 @push('js')
     <script>
-        // validasi hapus foto profile
-        document.querySelector('form[action="{{ url('profile/delete_avatar') }}"]').addEventListener('submit', function(e) {
-    e.preventDefault();
-    const form = this;
+        // Validasi hapus foto profile
+        document.querySelector('form[action="{{ url('profile/delete_avatar') }}"]').addEventListener('submit', function(
+        e) {
+            e.preventDefault();
+            const form = this;
 
-    Swal.fire({
-        title: 'Apakah Anda yakin ingin menghapus foto profil?',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Ya, hapus!',
-        cancelButtonText: 'Batal',
-        customClass: {
-            confirmButton: 'btn btn-warning',
-            cancelButton: 'btn btn-primary'
-        },
-        buttonsStyling: false,
-        didRender: function() {
-            const confirmButton = Swal.getConfirmButton();
-            confirmButton.style.marginRight = '10px';
-        }
-    }).then((result) => {
-        if (result.isConfirmed) {
-            fetch(form.action, {
-                method: 'POST',
-                headers: {
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                    'Content-Type': 'application/json'
+            Swal.fire({
+                title: 'Apakah Anda yakin ingin menghapus foto profil?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Ya, hapus!',
+                cancelButtonText: 'Batal',
+                customClass: {
+                    confirmButton: 'btn btn-warning',
+                    cancelButton: 'btn btn-primary'
                 },
-                body: JSON.stringify({})
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
+                buttonsStyling: false,
+                didRender: function() {
+                    const confirmButton = Swal.getConfirmButton();
+                    confirmButton.style.marginRight = '10px';
                 }
-                return response.json();
-            })
-            .then(data => {
-                if (data.status) {
-                    Swal.fire('Deleted!', data.message, 'success');
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    fetch(form.action, {
+                            method: 'POST',
+                            headers: {
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({})
+                        })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Network response was not ok');
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            if (data.status) {
+                                Swal.fire('Deleted!', data.message, 'success');
 
-                    // Update avatar in header
-                    const avatarImage = document.querySelector('img[alt="User Avatar"]');
-                    avatarImage.src = '{{ asset('default.png') }}';
+                                // Update avatar in header
+                                const avatarImage = document.querySelector('img[alt="User Avatar"]');
+                                avatarImage.src = '{{ asset('default.png') }}';
 
-                    // Update avatar in index view
-                    updateIndexAvatar('{{ asset('default.png') }}'); // Memanggil fungsi untuk memperbarui avatar di tampilan indeks
-                } else {
-                    Swal.fire('Error!', data.message, 'error');
+                                // Update avatar in index view (profile page)
+                                const profileAvatar = document.getElementById('profile-avatar');
+                                if (profileAvatar) {
+                                    profileAvatar.src =
+                                    '{{ asset('default.png') }}'; // Memperbarui src avatar di halaman profil
+                                }
+                            } else {
+                                Swal.fire('Error!', data.message, 'error');
+                            }
+                        })
+                        .catch(error => {
+                            Swal.fire('Error!', 'Terjadi kesalahan pada server: ' + error.message,
+                                'error');
+                        });
                 }
-            })
-            .catch(error => {
-                Swal.fire('Error!', 'Terjadi kesalahan pada server: ' + error.message, 'error');
             });
-        }
-    });
-});
+        });
 
-// Fungsi untuk memperbarui avatar di tampilan indeks
-function updateIndexAvatar(defaultAvatar) {
-    const indexAvatar = document.querySelector('img[index-avatar="user-avatar"]'); // Ganti selector sesuai dengan elemen di halaman indeks
-    if (indexAvatar) {
-        indexAvatar.src = defaultAvatar; // Memperbarui src dengan gambar default
-    }
-}
+
+        // Fungsi untuk memperbarui avatar di tampilan indeks
+        function updateIndexAvatar(defaultAvatar) {
+            const indexAvatar = document.querySelector(
+            'img[index-avatar="user-avatar"]'); // Ganti selector sesuai dengan elemen di halaman indeks
+            if (indexAvatar) {
+                indexAvatar.src = defaultAvatar; // Memperbarui src dengan gambar default
+            }
+        }
 
 
         // Validasi dan Ajax untuk form ganti password

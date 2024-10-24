@@ -69,7 +69,7 @@ $(document).ready(function() {
     $("#form-edit-barang").validate({
         rules: {
             kategori_id: { required: true, number: true },
-            barang_kode: { required: true, minlength: 2, maxlength: 5 },
+            barang_kode: { required: true, minlength: 2, maxlength: 8 },
             barang_nama: { required: true, minlength: 3, maxlength: 100 },
             harga_beli: { required: true, number: true },
             harga_jual: { required: true, number: true }

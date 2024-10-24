@@ -91,7 +91,9 @@
             <div class="modal-body text-center">
                 <!-- Avatar -->
                 <img src="{{ auth()->user()->avatar ? asset('storage/' . auth()->user()->avatar) : asset('default.png') }}"
-                    alt="User Avatar" class="img-circle mb-3" width="100" height="100">
+                    alt="User Avatar" class="img-circle mb-3" width="100" height="100"
+                    tyle="object-fit: cover;">
+                
             
                 <!-- Profile Information with Icons -->
                 <p><strong><i class="fas fa-user"></i> Username:</strong> {{ auth()->user()->username }}</p>
