@@ -1,10 +1,11 @@
+<!-- Form for Adding Sales Transaction (Penjualan) -->
 <form action="{{ url('/penjualan/ajax') }}" method="POST" id="form-tambah">
     @csrf
     <div id="modal-master" class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Tambah Data Penjualan</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"> 
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -54,6 +55,7 @@
                     <thead>
                         <tr>
                             <td>Nama Barang</td>
+                            <td>Stok Tersedia</td> <!-- New column for Stock -->
                             <td>Jumlah</td>
                             <td>Harga Satuan</td>
                             <td>Harga Total</td>
@@ -72,103 +74,127 @@
     </div>
 </form>
 
+
 <!-- CSRF Token -->
 <meta name="csrf-token" content="{{ csrf_token() }}">
 
 <!-- jQuery Script for Dynamic Form Handling -->
 <script>
-    $(document).ready(function() {
-        // Dynamically generate barang rows based on jumlah_barang
-        $('#jumlah_barang').on('input', function() {
-            let jumlah = $(this).val();
-            $('#barang-table').empty();  // Clear existing rows
-            for (let i = 0; i < jumlah; i++) {
-                let newRow = `
-                    <tr>
-                        <td>
-                            <select name="barang_id[${i}]" class="form-control select-barang" required>
-                                <option value="">- Pilih Barang -</option>
-                                @foreach ($barang as $b)
-                                    <option value="{{ $b->barang_id }}">{{ $b->barang_nama }}</option>
-                                @endforeach
-                            </select>
-                        </td>
-                        <td><input type="number" name="jumlah[${i}]" class="form-control jumlah-barang" required></td>
-                        <td><input type="number" name="harga[${i}]" class="form-control harga-satuan" readonly></td>
-                        <td><input type="text" name="harga_total[${i}]" class="form-control harga-total" readonly></td>
-                    </tr>
-                `;
-                $('#barang-table').append(newRow);
-            }
-        });
+   $(document).ready(function() {
+    // Dynamically generate barang rows based on jumlah_barang
+    $('#jumlah_barang').on('input', function() {
+        let jumlah = $(this).val();
+        $('#barang-table').empty();  // Clear existing rows
+        for (let i = 0; i < jumlah; i++) {
+            let newRow = `
+                <tr>
+                    <td>
+                        <select name="barang_id[${i}]" class="form-control select-barang" required>
+                            <option value="">- Pilih Barang -</option>
+                            @foreach ($barang as $b)
+                                <option value="{{ $b->barang_id }}">{{ $b->barang_nama }}</option>
+                            @endforeach
+                        </select>
+                    </td>
+                    <td><input type="number" name="stok[${i}]" class="form-control stok-jumlah" readonly></td> <!-- Stock column -->
+                    <td><input type="number" name="jumlah[${i}]" class="form-control jumlah-barang" required></td>
+                    <td><input type="number" name="harga[${i}]" class="form-control harga-satuan" readonly></td>
+                    <td><input type="text" name="harga_total[${i}]" class="form-control harga-total" readonly></td>
+                </tr>
+            `;
+            $('#barang-table').append(newRow);
+        }
+    });
 
-        // Fetch barang price when selected
-        $(document).on('change', '.select-barang', function() {
-            let barangId = $(this).val();
-            let row = $(this).closest('tr');
-            if (barangId) {
-                $.ajax({
-                    url: `penjualan/harga-barang/${barangId}`,
-                    type: 'GET',
-                    success: function(response) {
-                        if (response.status) {
-                            row.find('.harga-satuan').val(response.harga_jual);
-                            let jumlah = row.find('.jumlah-barang').val();
-                            if (jumlah) {
-                                row.find('.harga-total').val(jumlah * response.harga_jual);
-                            }
+    // Fetch barang price and stock when selected
+    $(document).on('change', '.select-barang', function() {
+        let barangId = $(this).val();
+        let row = $(this).closest('tr');
+        if (barangId) {
+            // Fetch price
+            $.ajax({
+                url: `penjualan/harga-barang/${barangId}`,
+                type: 'GET',
+                success: function(response) {
+                    if (response.status) {
+                        row.find('.harga-satuan').val(response.harga_jual);
+                        let jumlah = row.find('.jumlah-barang').val();
+                        if (jumlah) {
+                            row.find('.harga-total').val(jumlah * response.harga_jual);
                         }
                     }
-                });
-            }
-        });
+                }
+            });
 
-        // Calculate harga total when jumlah is updated
-        $(document).on('input', '.jumlah-barang', function() {
-            let row = $(this).closest('tr');
-            let jumlah = $(this).val();
-            let hargaSatuan = row.find('.harga-satuan').val();
+            // Fetch stock
+            $.ajax({
+                url: `penjualan/getStokBarang/${barangId}`,
+                type: 'GET',
+                success: function(response) {
+                    if (response.status) {
+                        row.find('.stok-jumlah').val(response.stok_jumlah); // Display stock quantity
+                    } else {
+                        Swal.fire('Error', 'Stok tidak ditemukan!', 'error');
+                    }
+                }
+            });
+        }
+    });
+
+    // Calculate harga total when jumlah is updated
+    $(document).on('input', '.jumlah-barang', function() {
+        let row = $(this).closest('tr');
+        let jumlah = $(this).val();
+        let hargaSatuan = row.find('.harga-satuan').val();
+        let stokTersedia = row.find('.stok-jumlah').val();
+
+        // Check if the entered quantity exceeds the available stock
+        if (parseInt(jumlah) > parseInt(stokTersedia)) {
+            Swal.fire('Error', 'Jumlah barang melebihi stok yang tersedia!', 'error');
+            $(this).val('');  // Clear the input
+            row.find('.harga-total').val('');  // Clear the total price
+        } else {
             let hargaTotal = jumlah * hargaSatuan;
             row.find('.harga-total').val(hargaTotal);
-        });
+        }
+    });
 
-        // Submit form using AJAX
-        $("#form-tambah").validate({
-            submitHandler: function(form) {
-                $.ajax({
-                    url: form.action,
-                    type: 'POST',
-                    data: $(form).serialize(),
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    success: function(response) {
-                        if (response.status) {
-                            $('#myModal').modal('hide');
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Berhasil',
-                                text: response.message
-                            });
-                            dataPenjualan.ajax.reload(); // Reload the DataTable
-                        } else {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Gagal',
-                                text: response.message
-                            });
-                        }
-                    },
-                    error: function(xhr) {
+    // Submit form using AJAX
+    $("#form-tambah").validate({
+        submitHandler: function(form) {
+            $.ajax({
+                url: form.action,
+                type: 'POST',
+                data: $(form).serialize(),
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(response) {
+                    if (response.status) {
+                        $('#myModal').modal('hide');
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Berhasil',
+                            text: response.message
+                        });
+                        dataPenjualan.ajax.reload(); // Reload the DataTable
+                    } else {
                         Swal.fire({
                             icon: 'error',
-                            title: 'Error',
-                            text: 'Terjadi kesalahan!'
+                            title: 'Gagal',
+                            text: response.message
                         });
                     }
-                });
-                return false;
-            }
-        });
+                },
+                error: function(xhr) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Terjadi kesalahan!'
+                    });
+                }
+            });
+            return false;
+        }
     });
-</script>
+});

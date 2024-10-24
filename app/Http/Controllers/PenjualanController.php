@@ -5,9 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\PenjualanModel;
 use App\Models\BarangModel;
 use App\Models\PenjualanDetailModel;
+use App\Models\StokModel;
 use App\Models\UserModel;
 use Barryvdh\DomPDF\Facade\Pdf;
-use Database\Seeders\detailpenjualanseeder;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -158,59 +159,85 @@ class PenjualanController extends Controller
             ]);
         }
     }
-    public function store_ajax(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'user_id' => 'required|numeric',
-            'pembeli' => 'required|string|min:3|max:20',
-            'penjualan_kode' => 'required|string|min:3|max:100|unique:t_penjualan,penjualan_kode',
-            'penjualan_tanggal' => 'required|date',
-            'barang_id' => 'required|array',
-            'barang_id.*' => 'numeric',
-            'harga' => 'required|array',
-            'harga.*' => 'numeric',
-            'jumlah' => 'required|array',
-            'jumlah.*' => 'numeric',
+    public function getStokBarang($barangId)
+{
+    // Fetch stock data based on barang ID
+    $stok = StokModel::where('barang_id', $barangId)->first();
+    
+    if ($stok) {
+        return response()->json([
+            'status' => true,
+            'stok_jumlah' => $stok->stok_jumlah
         ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'status' => false,
-                'msgField' => $validator->errors()
-            ]);
-        }
-
-        try {
-            // Simpan data penjualan
-            $penjualan = new PenjualanModel();
-            $penjualan->user_id = $request->user_id;
-            $penjualan->pembeli = $request->pembeli;
-            $penjualan->penjualan_kode = $request->penjualan_kode;
-            $penjualan->penjualan_tanggal = $request->penjualan_tanggal;
-            $penjualan->save();
-
-            // Simpan detail barang
-            foreach ($request->barang_id as $index => $barangId) {
-                $detailPenjualan = new PenjualanDetailModel();
-                $detailPenjualan->penjualan_id = $penjualan->penjualan_id;
-                $detailPenjualan->barang_id = $barangId;
-                $detailPenjualan->harga = $request->harga[$index];
-                $detailPenjualan->jumlah = $request->jumlah[$index];
-                $detailPenjualan->save();
-            }
-
-            return response()->json([
-                'status' => true,
-                'message' => 'Data penjualan berhasil disimpan!'
-            ]);
-        } catch (\Exception $e) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Terjadi kesalahan, data gagal disimpan!',
-                'error' => $e->getMessage()
-            ]);
-        }
+    } else {
+        return response()->json([
+            'status' => false,
+            'message' => 'Stok tidak ditemukan'
+        ]);
     }
+}
+
+public function store_ajax(Request $request)
+{
+    $validator = Validator::make($request->all(), [
+        'user_id' => 'required|numeric',
+        'pembeli' => 'required|string|min:3|max:20',
+        'penjualan_kode' => 'required|string|min:3|max:100|unique:t_penjualan,penjualan_kode',
+        'penjualan_tanggal' => 'required|date',
+        'barang_id' => 'required|array',
+        'barang_id.*' => 'numeric',
+        'harga' => 'required|array',
+        'harga.*' => 'numeric',
+        'jumlah' => 'required|array',
+        'jumlah.*' => 'numeric',
+    ]);
+
+    if ($validator->fails()) {
+        return response()->json([
+            'status' => false,
+            'msgField' => $validator->errors()
+        ]);
+    }
+
+    try {
+        // Save the sale data
+        $penjualan = new PenjualanModel();
+        $penjualan->user_id = $request->user_id;
+        $penjualan->pembeli = $request->pembeli;
+        $penjualan->penjualan_kode = $request->penjualan_kode;
+        $penjualan->penjualan_tanggal = $request->penjualan_tanggal;
+        $penjualan->save();
+
+        // Save item details and update stock
+        foreach ($request->barang_id as $index => $barangId) {
+            $detailPenjualan = new PenjualanDetailModel();
+            $detailPenjualan->penjualan_id = $penjualan->penjualan_id;
+            $detailPenjualan->barang_id = $barangId;
+            $detailPenjualan->harga = $request->harga[$index];
+            $detailPenjualan->jumlah = $request->jumlah[$index];
+            $detailPenjualan->save();
+
+            // Reduce stock
+            $stok = StokModel::where('barang_id', $barangId)->first();
+            if ($stok) {
+                $stok->stok_jumlah -= $request->jumlah[$index];
+                $stok->save();
+            }
+        }
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Data penjualan berhasil disimpan!'
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'status' => false,
+            'message' => 'Terjadi kesalahan, data gagal disimpan!',
+            'error' => $e->getMessage()
+        ]);
+    }
+}
+
     public function import()
     {
         return view('penjualan.import');

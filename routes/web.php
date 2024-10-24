@@ -194,6 +194,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/export_excel', [PenjualanController::class, 'export_excel']); // Export data penjualan ke Excel
         Route::get('/export_pdf', [PenjualanController::class, 'export_pdf']);     // Export data penjualan ke PD
         Route::get('/harga-barang/{id}', [PenjualanController::class, 'getHargaBarang']);
+        Route::get('/getStokBarang/{barangId}', [PenjualanController::class, 'getStokBarang']);
 
         
     });
