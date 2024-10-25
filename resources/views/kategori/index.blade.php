@@ -25,7 +25,7 @@
             <table class="table table-bordered table-striped table-hover table-sm" id="tabel_kategori">
                 <thead>
                     <tr>
-                        <th>ID</th>
+                        <th>No</th>
                         <th>Kategori Kode</th>
                         <th>Kategori Nama</th>
                         <th>Aksi</th>

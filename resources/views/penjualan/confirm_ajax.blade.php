@@ -43,6 +43,7 @@
                 <table class="table table-sm table-bordered">
                     <thead>
                         <tr>
+                            <th>ID Barang</th>
                             <th>Nama Barang</th>
                             <th>Harga Satuan</th>
                             <th>Jumlah</th>
@@ -52,6 +53,7 @@
                     <tbody>
                         @foreach ($penjualanDetail as $detail)
                             <tr>
+                                <td>{{ $detail->barang->barang_id }}</td>
                                 <td>{{ $detail->barang->barang_nama }}</td>
                                 <td>{{ number_format($detail->harga, 2) }}</td>
                                 <td>{{ $detail->jumlah }}</td>

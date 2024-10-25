@@ -41,7 +41,7 @@
                 <table class="table table-bordered table-striped table-hover table-sm" id="table_stok">
                     <thead>
                         <tr>
-                            <th>ID</th>
+                            <th>No</th>
                             <th>Nama Supplier</th>
                             <th>Nama Barang</th>
                             <th>Nama Pegawai</th>

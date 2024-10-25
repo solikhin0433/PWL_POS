@@ -28,7 +28,7 @@
         <table class="table table-bordered table-striped table-hover table-sm" id="tabel_supplier">
             <thead>
                 <tr>
-                    <th>ID</th>
+                    <th>No</th>
                     <th>Kode Supplier</th>
                     <th>Nama Supplier</th>
                     <th>Alamat Supplier</th>

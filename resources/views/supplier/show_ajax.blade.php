@@ -32,6 +32,10 @@
                 </div> 
                 <table class="table table-sm table-bordered table-striped"> 
                     <tr>
+                        <th class="text-right col-3">ID Supplier :</th>
+                        <td class="col-9">{{ $supplier->suppllier_id}}</td>
+                    </tr> 
+                    <tr>
                         <th class="text-right col-3">Kode Supplier :</th>
                         <td class="col-9">{{ $supplier->supplier_kode}}</td>
                     </tr> 
