@@ -555,7 +555,7 @@ public function update_password(Request $request)
     // Ambil user yang sedang login
     $user = $request->user();
 
-    // Pastikan user ditemukan
+    
     if ($user) {
         // Cek apakah password lama cocok
         if (!Hash::check($request->current_password, $user->password)) {

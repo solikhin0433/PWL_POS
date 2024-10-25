@@ -141,7 +141,7 @@
         }
     });
 
-    // Calculate harga total when jumlah is updated
+    // Calculate harga total ketika jumlah is updated
     $(document).on('input', '.jumlah-barang', function() {
         let row = $(this).closest('tr');
         let jumlah = $(this).val();

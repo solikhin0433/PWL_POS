@@ -118,7 +118,7 @@
                     },
                     password: {
                         required: true,
-                        minlength: 8,
+                        minlength: 5,
                         maxlength: 20
                     },
                     level_id: {
