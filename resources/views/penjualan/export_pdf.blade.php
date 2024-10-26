@@ -72,31 +72,38 @@
     <table class="border-all">
         <thead>
             <tr>
-                <th class="text-center">No</th>
+                <th>No</th>
                 <th>User ID</th>
                 <th>Pembeli</th>
-                <th>Kode Penjualan</th>
                 <th>Tanggal Penjualan</th>
+                <th>Kode Penjualan</th>
                 <th>Barang ID</th>
                 <th class="text-right">Harga</th>
                 <th class="text-right">Jumlah</th>
             </tr>
         </thead>
         <tbody>
-            @php $no = 1; @endphp <!-- Inisialisasi variabel penghitung -->
+            @php 
+                $no = 1;
+            @endphp
             @foreach($penjualan as $penjualanItem)
-                @foreach($penjualanItem->penjualan_detail as $detail)
-                    <tr>
-                        <td class="text-center">{{ $no++ }}</td> <!-- Gunakan variabel penghitung -->
-                        <td>{{ $penjualanItem->user_id }}</td>
-                        <td>{{ $penjualanItem->pembeli }}</td>
-                        <td>{{ $penjualanItem->penjualan_kode }}</td>
-                        <td>{{ $penjualanItem->penjualan_tanggal }}</td>
+                @php $firstRow = true; @endphp
+                @foreach($penjualanItem->penjualan_detail as $index => $detail)
+                    <tr class="{{ $index % 2 == 0 ? '' : 'bg-gray' }}">
+                        @if($firstRow)
+                            <td class="text-center" rowspan="{{ count($penjualanItem->penjualan_detail) }}">{{ $no }}</td>
+                            <td rowspan="{{ count($penjualanItem->penjualan_detail) }}">{{ $penjualanItem->user_id }}</td>
+                            <td rowspan="{{ count($penjualanItem->penjualan_detail) }}">{{ $penjualanItem->pembeli }}</td>
+                            <td rowspan="{{ count($penjualanItem->penjualan_detail) }}">{{ $penjualanItem->penjualan_tanggal }}</td>
+                            <td rowspan="{{ count($penjualanItem->penjualan_detail) }}">{{ $penjualanItem->penjualan_kode }}</td>
+                        @endif
                         <td>{{ $detail->barang_id }}</td>
                         <td class="text-right">{{ number_format($detail->harga, 0, ',', '.') }}</td>
                         <td class="text-right">{{ $detail->jumlah }}</td>
                     </tr>
+                    @php $firstRow = false; @endphp
                 @endforeach
+                @php $no++; @endphp
             @endforeach
         </tbody>
     </table>

@@ -21,18 +21,36 @@
             @if (session('error'))
                 <div class="alert alert-danger">{{ session('error') }}</div>
             @endif
-            <div class="row">
+            <div class="row mb-3">
                 <div class="col-md-12">
                     <div class="form-group row">
-                        <label class="col-1 control-label col-form-label">Filter </label>
-                        <div class="col-3">
-                            <select class="form-control" id="suppllier_id" name="suppllier_id" required>
+                        <label class="col-form-label col-1">Filter:</label>
+                        <div class="col">
+                            <select class="form-control" id="suppllier_id" name="suppllier_id">
                                 <option value="">- Semua -</option>
                                 @foreach ($supplier as $item)
                                     <option value="{{ $item->suppllier_id }}">{{ $item->supplier_nama }}</option>
                                 @endforeach
                             </select>
                             <small class="form-text text-muted">Supplier Barang</small>
+                        </div>
+                        <div class="col">
+                            <select class="form-control" id="barang_id" name="barang_id">
+                                <option value="">- Semua -</option>
+                                @foreach ($barang as $item)
+                                    <option value="{{ $item->barang_id }}">{{ $item->barang_nama }}</option>
+                                @endforeach
+                            </select>
+                            <small class="form-text text-muted">Nama Barang</small>
+                        </div>
+                        <div class="col">
+                            <select class="form-control" id="user_id" name="user_id">
+                                <option value="">- Semua -</option>
+                                @foreach ($user as $u)
+                                    <option value="{{ $u->user_id }}">{{ $u->nama }}</option>
+                                @endforeach
+                            </select>
+                            <small class="form-text text-muted">Nama Pembuat</small>
                         </div>
                     </div>
                 </div>
@@ -76,9 +94,12 @@
                     "type": "POST",
                     "data": function(d) {
                         d.suppllier_id = $('#suppllier_id').val();
+                        d.barang_id = $('#barang_id').val();
+                        d.user_id = $('#user_id').val();
                     }
                 },
-                columns: [{
+                columns: [
+                    {
                         data: "DT_RowIndex",
                         className: "text-center",
                         orderable: false,
@@ -86,46 +107,41 @@
                     },
                     {
                         data: "supplier.supplier_nama",
-                        className: "",
                         orderable: true,
                         searchable: true
                     },
                     {
                         data: "barang.barang_nama",
-                        className: "",
                         orderable: true,
                         searchable: true
                     },
                     {
                         data: "user.nama",
-                        className: "",
                         orderable: false,
-                        searchable: false,
+                        searchable: false
                     },
                     {
                         data: "stok_tanggal",
-                        className: "",
                         orderable: true,
                         searchable: true
                     },
                     {
                         data: "stok_jumlah",
-                        className: "",
                         orderable: true,
                         searchable: true
                     },
                     {
                         data: "aksi",
-                        className: "",
                         orderable: false,
                         searchable: false
                     }
                 ]
-
             });
-            $('#suppllier_id').on('change', function() {
+
+            // Reload table data on filter change
+            $('#suppllier_id, #barang_id, #user_id').on('change', function() {
                 dataStok.ajax.reload();
-            })
+            });
         });
     </script>
 @endpush
