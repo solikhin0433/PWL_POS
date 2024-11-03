@@ -6,7 +6,9 @@ use App\Http\Controllers\Api\LogoutController;
 use App\Http\Controllers\Api\LevelController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\KategoriController;
-
+use App\Http\Controllers\Api\BarangController;
+use App\Http\Controllers\Api\RegisterController;
+use App\Http\Controllers\Api\LoginController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -18,13 +20,12 @@ use App\Http\Controllers\Api\KategoriController;
 |
 */
 
-Route::post('/register', App\Http\Controllers\Api\RegisterController::class)->name('register');
 
-
-Route::post('/login', App\Http\Controllers\Api\LoginController::class)->name('login');
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-
-    return $request->user(); 
+Route::post('/register',RegisterController::class)->name('register');
+Route::post('/register1',RegisterController::class)->name('register1');
+Route::post('/login',LoginController::class)->name('login');
+Route::middleware('auth:api')->get('/user',function(Request $request){
+    return $request->user();
 });
 Route::post('/logout', LogoutController::class)->name('logout');
 
@@ -46,3 +47,9 @@ Route::post('kategoris', [KategoriController::class, 'store']);
 Route::get('kategoris/{kategori}', [KategoriController::class, 'show']);
 Route::put('kategoris/{kategori}', [KategoriController::class, 'update']);
 Route::delete('kategoris/{kategori}', [KategoriController::class, 'destroy']);
+
+Route::get('barangs', [BarangController::class, 'index']);
+Route::post('barangs', [BarangController::class, 'store']);
+Route::get('barangs/{barang}', [BarangController::class, 'show']);
+Route::put('barangs/{barang}', [BarangController::class, 'update']);
+Route::delete('barangs/{barang}', [BarangController::class, 'destroy']);
