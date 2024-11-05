@@ -1,7 +1,5 @@
 <?php
-
 namespace App\Http\Controllers\Api;
-
 use App\Http\Controllers\Controller;
 use App\Models\usermodel;
 use Illuminate\Http\Request;
@@ -22,9 +20,7 @@ class RegisterController extends Controller
         if($validator->fails()){
             return response()->json($validator->errors(),422);
         }
-
         $avatar = $request->avatar->storeAs('/avatar', $request->avatar->hashName());
-
         // create user
         $user = usermodel::create([
             'username' => $request->username,
@@ -33,7 +29,6 @@ class RegisterController extends Controller
             'level_id'=>$request->level_id,
             'avatar'=> $avatar
         ]);
-
         // return response json user jika berhasil dibuat
         if($user){
             return response()->json([
@@ -41,7 +36,6 @@ class RegisterController extends Controller
                 'user'=>$user
             ],201);
         }
-
         // jika proses create failed
         return response()->json([
             'success'=>false,

@@ -119,42 +119,53 @@ class BarangController extends Controller
     // store ajax
     public function store_ajax(Request $request)
     {
-        // Cek apakah request berupa Ajax
         if ($request->ajax() || $request->wantsJson()) {
-            // Aturan validasi
             $rules = [
                 'kategori_id' => 'required|integer',
                 'barang_kode' => 'required|string|min:2|unique:m_barang,barang_kode',
                 'barang_nama' => 'required|string|max:100',
                 'harga_beli'  => 'required|numeric|min:1',
-                'harga_jual'  => 'required|numeric|min:1'
+                'harga_jual'  => 'required|numeric|min:1',
+                'avatar'      => 'nullable|image|mimes:jpg,jpeg,png|max:2048'
             ];
-
-            // Validasi data inputan
+    
             $validator = Validator::make($request->all(), $rules);
-
-            // Jika validasi gagal
+    
             if ($validator->fails()) {
                 return response()->json([
                     'status' => false,
                     'message' => 'Validasi Gagal',
-                    'msgField' => $validator->errors() // Pesan error validasi
+                    'msgField' => $validator->errors()
                 ]);
             }
-
-            // Simpan data ke database
-            BarangModel::create($request->all());
-
-            // Kembalikan respon JSON jika berhasil
+    
+            // Handle the avatar upload, if provided
+            $filename = null;
+            if ($request->hasFile('avatar')) {
+                // Use storeAs to save the avatar in the specified directory
+                $filename = $request->avatar->storeAs('avatar_barang', $request->avatar->hashName());
+            }
+    
+            // Create barang with the uploaded or null avatar
+            $barang = BarangModel::create([
+                'kategori_id' => $request->kategori_id,
+                'barang_kode' => $request->barang_kode,
+                'barang_nama' => $request->barang_nama,
+                'harga_beli'  => $request->harga_beli,
+                'harga_jual'  => $request->harga_jual,
+                'avatar'      => $filename // Store the filename directly
+            ]);
+    
             return response()->json([
                 'status' => true,
                 'message' => 'Data barang berhasil disimpan'
             ]);
         }
-
-        // Jika bukan request Ajax, redirect ke halaman lain (misalnya halaman utama)
+    
         return redirect('/');
     }
+    
+
 
     // Menampilkan detail barang
     public function show($id)

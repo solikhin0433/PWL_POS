@@ -52,26 +52,31 @@
                         <td class="col-9">{{ \Carbon\Carbon::parse($penjualan->penjualan_tanggal)->format('d-m-Y H:i:s') }}</td>
                     </tr>                    
                 </table>
+                
                 <table class="table table-sm table-bordered">
                     <thead>
                          <tr>
+                              <th>Gambar Barang</th>
                               <th>Nama Barang</th>
                               <th>Harga</th>
                               <th>Jumlah</th>
                               <th>Total Harga</th>
-                          </tr>
+                         </tr>
                     </thead>
                     <tbody>
                          @foreach($penjualan->penjualan_detail as $detail)
-                         <tr>
-                              <td>{{ $detail->barang->barang_nama}}</td>
-                              <td>{{ $detail->harga}}</td>
-                              <td>{{ $detail->jumlah}}</td>
+                         <tr>  
+                              <td>
+                                  <img src="{{ $detail->barang->avatar ? asset($detail->barang->avatar) : asset('barang_default.png') }}" 
+                                       alt="Gambar Barang" style="width: 100px; height: auto;">
+                              </td>
+                              <td>{{ $detail->barang->barang_nama }}</td>
+                              <td>{{ number_format($detail->harga, 2) }}</td>
+                              <td>{{ $detail->jumlah }}</td>
                               <td>{{ number_format($detail->harga * $detail->jumlah, 2) }}</td>
                          </tr>
+                         @endforeach
                     </tbody>
-                    @endforeach
-
                 </table>
             </div>
             <div class="modal-footer">
@@ -79,4 +84,4 @@
             </div>
         </div>
     </div>
-@endempty
+@endempty  

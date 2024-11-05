@@ -25,7 +25,8 @@ class BarangModel extends Model
     protected function avatar(): Attribute
     {
         return Attribute::make(
-            get: fn ($avatar) => $avatar ? url('storage/avatars/'.$avatar) : null // Menyimpan di folder storage
+            get: fn ($avatar) => $avatar ? asset('storage/' . $avatar) : asset('barang_default.png')
         );
     }
+    
 }

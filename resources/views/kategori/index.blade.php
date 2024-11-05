@@ -31,7 +31,7 @@
                         <th>Aksi</th>
                     </tr>
                 </thead>
-            </table>
+            </table>ara
         </div>
     </div>
     <div id="myModal" class="modal fade animate shake" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" 
